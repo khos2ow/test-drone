@@ -1,15 +1,35 @@
+---
 kind: pipeline
-name: default
+name: golang-1-11
 
 steps:
 - name: build
-  image: golang
+  image: golang:1.11
   commands:
   - go build
   - go test -short
 
 - name: integration
-  image: golang
+  image: golang:1.11
+  commands:
+  - go test -v
+  when:
+    event:
+    - pull_request
+
+---
+kind: pipeline
+name: golang-1-10
+
+steps:
+- name: build
+  image: golang:1.10
+  commands:
+  - go build
+  - go test -short
+
+- name: integration
+  image: golang:1.10
   commands:
   - go test -v
   when:
