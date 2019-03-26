@@ -1,37 +1,43 @@
 ---
 kind: pipeline
-name: golang-1-11
+name: verify
 
 steps:
-- name: build
+- name: vendor
   image: golang:1.11
   commands:
-  - go build
-  - go test -short
-
-- name: integration
+  - echo "vendor"
+- name: format
   image: golang:1.11
   commands:
-  - go test -v
-  when:
-    event:
-    - pull_request
+  - echo "format"
+- name: lint
+  image: golang:1.11
+  commands:
+  - echo "lint"
 
 ---
 kind: pipeline
-name: golang-1-10
+name: test
 
 steps:
-- name: build
-  image: golang:1.10
-  commands:
-  - go build
-  - go test -short
-
-- name: integration
+- name: test
   image: golang:1.10
   commands:
   - go test -v
-  when:
-    event:
-    - pull_request
+
+depends_on:
+  - verify
+
+---
+kind: pipeline
+name: build
+
+steps:
+- name: test
+  image: golang:1.10
+  commands:
+  - go build
+
+depends_on:
+  - test
