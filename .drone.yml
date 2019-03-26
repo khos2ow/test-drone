@@ -25,8 +25,9 @@ steps:
   image: golang:1.10
   commands:
   - go test -v
-  depends_on:
-    - verify
+
+depends_on:
+  - verify
 
 ---
 kind: pipeline
@@ -37,5 +38,6 @@ steps:
   image: golang:1.10
   commands:
   - go build
-  depends_on:
-    - test
+
+depends_on:
+  - test
